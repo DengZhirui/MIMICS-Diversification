@@ -255,8 +255,8 @@ def generate_proxy_relevant_feat():
                 f_out.write(f'{query},{doc_id},{judgement}\n')
 
 if __name__ == "__main__":
-    # data_process()
-    # generate_qd()
-    # split_train_test_qid()
-    generate_proxy_relevant_feat()
+    data_process()
+    generate_qd()
+    split_train_test_qid()
+    # generate_proxy_relevant_feat()
 
