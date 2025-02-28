@@ -237,8 +237,26 @@ def split_train_test_qid():
     np.save('data/train_qids.npy', train_qid_list)
     np.save('data/test_qids.npy', test_qid_list)    
 
+def generate_proxy_relevant_feat():
+    # 读取原始TSV文件并转换为CSV格式
+    with open('data/judgement.tsv', 'r', encoding='utf-8') as f_in:
+        with open('data/.rel_feat.csv', 'w', encoding='utf-8') as f_out:
+            # 写入新的表头
+            f_out.write('query,doc,judgement\n')
+            
+            # 跳过原始文件的表头
+            next(f_in)
+            
+            # 处理每一行数据
+            for line in f_in:
+                fields = line.strip().split('\t')
+                # 只取query、doc_id和judgement字段，并重命名doc_id为doc
+                query, _, doc_id, judgement = fields
+                f_out.write(f'{query},{doc_id},{judgement}\n')
+
 if __name__ == "__main__":
     # data_process()
     # generate_qd()
-    split_train_test_qid()
+    # split_train_test_qid()
+    generate_proxy_relevant_feat()
 
