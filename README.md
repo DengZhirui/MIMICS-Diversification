@@ -1,1 +1,22 @@
 # MIMICS-Diversification
+
+This repository builds a search result diversification dataset based on the MIMICS dataset. This dataset is constructed based on the [dataset](https://github.com/PxYu/LiEGe-SIGIR2022?tab=readme-ov-file) used by [LiEGe](https://dl.acm.org/doi/abs/10.1145/3477495.3532067) and the dataset processed strategy in [DUB](https://dl.acm.org/doi/10.1145/3583780.3615050).
+
+## Data Collection
+
+Download the MIMICS dataset from [MIMICS](https://github.com/castorini/mimics) and the search engine result page from [SERP](http://ciir.cs.umass.edu/downloads/mimics-serp/MIMICS-BingAPI-results.zip).
+
+## Data Processing
+
+```
+python process_mimics.py
+```
+
+## Description of the dataset
+
+- `query2intents.json`: The mapping from query to potential user intents, {query: [intents, intents, ...]}. Each candidate answers in MIMICS for a queryclarification pair is considered as a potential user intents.
+- `serps.pkl`: {query: list} distionary, where `list` is the list of document ids retrieved by Bing for the query.
+- `judgement.csv`: Each line contains `query\tintent\tdoc_id\tjudgement`. The judgement reveals the relevance between the document and the intent under the query.
+- `stand_metrics.data`: The ideal alpha-DCG for each query.
+- `all_qids.npy`: [qid1, qid2, ...], The list of query ids.
+
