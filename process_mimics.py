@@ -4,8 +4,8 @@ from collections import defaultdict
 import random
 from tqdm import tqdm
 
-mimics_path = "/Users/sylviadeng/Downloads/MIMICS-master/data/MIMICS-ClickExplore.tsv"
-serps_path = "/Users/sylviadeng/Downloads/MIMICS-BingAPI.result"
+mimics_path = "/path/to/MIMICS-ClickExplore.tsv"
+serps_path = "/path/to/MIMICS-BingAPI.result"
 
 
 def generate_query2intents():

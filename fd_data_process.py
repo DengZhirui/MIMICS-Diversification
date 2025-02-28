@@ -230,8 +230,15 @@ def generate_qd():
     pickle.dump(query_dict, open('./data/div_query.data', 'wb'), True)
     return query_dict
 
+def split_train_test_qid():
+    qid_list = np.load('data/all_qids.npy')
+    train_qid_list = qid_list[:int(len(qid_list) * 0.8)]
+    test_qid_list = qid_list[int(len(qid_list) * 0.8):]
+    np.save('data/train_qids.npy', train_qid_list)
+    np.save('data/test_qids.npy', test_qid_list)    
 
 if __name__ == "__main__":
-    data_process()
-    generate_qd()
+    # data_process()
+    # generate_qd()
+    split_train_test_qid()
 

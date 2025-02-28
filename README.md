@@ -1,6 +1,6 @@
 # MIMICS-Diversification
 
-This repository builds a search result diversification dataset based on the MIMICS dataset. This dataset is constructed based on the [dataset](https://github.com/PxYu/LiEGe-SIGIR2022?tab=readme-ov-file) used by [LiEGe](https://dl.acm.org/doi/abs/10.1145/3477495.3532067) and the dataset processed strategy in [DUB](https://dl.acm.org/doi/10.1145/3583780.3615050).
+This repository builds a search result diversification dataset based on the MIMICS-ClickExplore dataset. This dataset is constructed based on the [dataset](https://github.com/PxYu/LiEGe-SIGIR2022?tab=readme-ov-file) used by [LiEGe](https://dl.acm.org/doi/abs/10.1145/3477495.3532067) and the dataset processed strategy in [DUB](https://dl.acm.org/doi/10.1145/3583780.3615050).
 
 ## Data Collection
 
@@ -28,4 +28,8 @@ Since the document from the same URL contains different content for different qu
 - `div_query.data`: Data structure used by [FairDiverse benchmark](https://github.com/XuChen0427/FairDiverse/tree/master).
 - `stand_metrics.data`: The ideal alpha-DCG for each query.
 - `all_qids.npy`: [qid1, qid2, ...], The list of query ids.
+
+We also provide a 8:2 split of the query ids for training and testing.
+- `train_qids.npy`: [qid1, qid2, ...], The list of query ids for training.
+- `test_qids.npy`: [qid1, qid2, ...], The list of query ids for testing.
 
