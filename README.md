@@ -14,9 +14,13 @@ python process_mimics.py
 
 ## Description of the dataset
 
+Since the document from the same URL contains different content for different queries, following the strategy in [LiEGe](https://dl.acm.org/doi/abs/10.1145/3477495.3532067), doc-id is named with *query*-number.
+
 - `query2intents.json`: The mapping from query to potential user intents, {query: [intents, intents, ...]}. Each candidate answers in MIMICS for a queryclarification pair is considered as a potential user intents.
 - `serps.pkl`: {query: list} distionary, where `list` is the list of document ids retrieved by Bing for the query.
-- `judgement.csv`: Each line contains `query\tintent\tdoc_id\tjudgement`. The judgement reveals the relevance between the document and the intent under the query.
+- `id2doc.pkl`: {doc_id: doc_content} dictionary, where `doc_content` is the concatenation of the document name and the document snippet.
+- `judgement.tsv`: Each line contains `query\tintent\tdoc_id\tjudgement`. The judgement reveals the relevance between the document and the intent under the query.
+- `div_query.data`: Data structure used by [FairDiverse benchmark](https://github.com/XuChen0427/FairDiverse/tree/master).
 - `stand_metrics.data`: The ideal alpha-DCG for each query.
 - `all_qids.npy`: [qid1, qid2, ...], The list of query ids.
 
