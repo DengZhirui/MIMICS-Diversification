@@ -244,7 +244,7 @@ def generate_proxy_relevant_feat():
     with open('data/judgement.tsv', 'r', encoding='utf-8') as f_in:
         with open('data/.rel_feat.csv', 'w', encoding='utf-8') as f_out:
             # Write new header
-            f_out.write('query,doc,judgement\n')
+            f_out.write('query\tdoc\tjudgement\n')
             
             # Skip original file header
             next(f_in)
@@ -254,7 +254,7 @@ def generate_proxy_relevant_feat():
                 fields = line.strip().split('\t')
                 # Only take query, doc_id and judgement fields, rename doc_id to doc
                 query, _, doc_id, judgement = fields
-                f_out.write(f'{query},{doc_id},{judgement}\n')
+                f_out.write(f'{query}\t{doc_id}\t{judgement}\n')
 '''
 
 
