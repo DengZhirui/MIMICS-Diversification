@@ -7,9 +7,14 @@ This repository builds a search result diversification dataset based on the MIMI
 Download the MIMICS dataset from [MIMICS](https://github.com/castorini/mimics) and the search engine result page from [SERP](http://ciir.cs.umass.edu/downloads/mimics-serp/MIMICS-BingAPI-results.zip).
 
 ## Data Processing
-
+You can build the dataset by running the following command:
 ```
 python process_mimics.py
+```
+
+We also provide code to process the data same with [FairDiverse benchmark](https://github.com/XuChen0427/FairDiverse/tree/master):
+```
+python fd_data_process.py
 ```
 
 ## Description of the dataset
