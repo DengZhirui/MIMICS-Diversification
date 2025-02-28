@@ -4,8 +4,8 @@ from collections import defaultdict
 import random
 from tqdm import tqdm
 
-mimics_path = "/path/to/MIMICS-ClickExplore.tsv"
-serps_path = "/path/to/MIMICS-BingAPI.result"
+mimics_path = "/Users/sylviadeng/Downloads/MIMICS-master/data/MIMICS-ClickExplore.tsv"
+serps_path = "/Users/sylviadeng/Downloads/MIMICS-BingAPI.result"
 
 
 def generate_query2intents():
@@ -20,9 +20,13 @@ def generate_query2intents():
             query = fields[0]
             intents = [opt for opt in fields[2:7] if opt]
             
-            if query not in query2intents:
-                query2intents[query] = set()
-            query2intents[query].update(intents)
+            # Only keep queries with less than 10 intents
+            if len(intents) < 10:
+                if query not in query2intents:
+                    query2intents[query] = set()
+                query2intents[query].update(intents)
+    
+    print(f"Number of queries with less than 10 intents: {len(query2intents)}")
     
     # Random sampling 10% of queries
     all_queries = list(query2intents.keys())
