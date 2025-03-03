@@ -89,7 +89,6 @@ def get_docs_dict():
         # Normalize scores
         max_score = docs_rel_score_dict[qid][0]  # First score is the highest
         docs_rel_score_dict[qid] = [score/max_score for score in docs_rel_score_dict[qid]]
-    
     return docs_dict, docs_rel_score_dict
 
 

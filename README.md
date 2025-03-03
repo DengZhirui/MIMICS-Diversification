@@ -19,7 +19,7 @@ python fd_data_process.py
 
 ## Description of the dataset
 
-Since the document from the same URL contains different content for different queries, following the strategy in [LiEGe](https://dl.acm.org/doi/abs/10.1145/3477495.3532067), doc-id is named with *query*-number.
+Since the document from the same URL contains different content for different queries, following the strategy in [LiEGe](https://dl.acm.org/doi/abs/10.1145/3477495.3532067), doc-id is named with *query*-number. We filter out the queries with less than 10 intents since the maximum number of documents in each query is 10.
 
 - `query2intents.json`: The mapping from query to potential user intents, {query: [intents, intents, ...]}. Each candidate answers in MIMICS for a queryclarification pair is considered as a potential user intents.
 - `query2qid.json`: The mapping from query to query id, {query: qid}.
@@ -49,7 +49,14 @@ python data_info.py
 |--------|---------|-----------|
 | Maximum | 10 | 10 |
 | Minimum | 2 | 4 |
-| Average | 6.06 | 9.08 |
+| Average | 6.05 | 9.07 |
+
+| Metric | #Number |
+|--------|---------|
+| Query | 5731 |
+| Documents | 51956 |
+| Query-Intent-Document pairs | 315111 |
+
 
 ### Example Queries
 

@@ -33,23 +33,11 @@ def generate_query2intents():
     
     # Random sampling 10% of queries
     all_queries = list(query2intents.keys())
-    sample_size = int(len(all_queries) * 0.15)
+    sample_size = int(len(all_queries) * 0.1)
     sampled_queries = random.sample(all_queries, sample_size)
     
     # Keep only sampled queries
     sampled_query2intents = {k: list(query2intents[k]) for k in sampled_queries}
-
-    with open('data/query2intents.json', 'w', encoding='utf-8') as f:
-        json.dump(sampled_query2intents, f, ensure_ascii=False, indent=4)
-
-    # Create query to qid mapping
-    query2qid = {query: f"{idx+1}" for idx, query in enumerate(sampled_query2intents.keys())}
-    with open('data/query2qid.json', 'w', encoding='utf-8') as f:
-        json.dump(query2qid, f, ensure_ascii=False, indent=4)
-    
-    # Save all qids
-    all_qids = np.array(list(query2qid.values()))
-    np.save('data/all_qids.npy', all_qids)
     
     return sampled_query2intents
 
@@ -88,14 +76,28 @@ def format_serps(sampled_query2intents):
                     
                     # Store query-doc_id mapping
                     serps[query].append(doc_id)
+            else:
+                del(sampled_query2intents[query])
     
     with open('data/id2doc.pkl', 'wb') as f:
         pickle.dump(id2doc, f)
     
     with open('data/serps.pkl', 'wb') as f:
         pickle.dump(dict(serps), f)
+
+    with open('data/query2intents.json', 'w', encoding='utf-8') as f:
+        json.dump(sampled_query2intents, f, ensure_ascii=False, indent=4)
+
+    # Create query to qid mapping
+    query2qid = {query: f"{idx+1}" for idx, query in enumerate(sampled_query2intents.keys())}
+    with open('data/query2qid.json', 'w', encoding='utf-8') as f:
+        json.dump(query2qid, f, ensure_ascii=False, indent=4)
     
-    return id2doc, serps, sampled_query2intents
+    # Save all qids
+    all_qids = np.array(list(query2qid.values()))
+    np.save('data/all_qids.npy', all_qids)
+    
+    return id2doc, serps
 
 def check_empty_serps(serps, sampled_query2intents):
     # Check queries with empty document list

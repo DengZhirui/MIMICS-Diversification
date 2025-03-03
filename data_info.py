@@ -9,6 +9,11 @@ with open('data/query2intents.json', 'r', encoding='utf-8') as f:
 with open('data/serps.pkl', 'rb') as f:
     serps = pickle.load(f)
 
+with open('data/id2doc.pkl', 'rb') as f:
+        id2doc = pickle.load(f)
+
+print("query number: {}, document number: {}".format(len(query2intents), len(id2doc)))
+
 # Calculate the number of intents for each query
 intent_counts = [len(intents) for intents in query2intents.values()]
 max_intents = max(intent_counts)
