@@ -19,18 +19,8 @@ def get_query_dict():
     with open('data/query2intents.json', 'r', encoding='utf-8') as f:
         query2intents = json.load(f)
     
-    # Create query to qid mapping
-    query2qid = {query: f"{idx+1}" for idx, query in enumerate(query2intents.keys())}
-    
-    # Save or load all qids
-    qids_path = 'data/all_qids.npy'
-    if os.path.exists(qids_path):
-        # Load existing qids
-        all_qids = np.load(qids_path)
-    else:
-        # Create and save new qids
-        all_qids = np.array(list(query2qid.values()))
-        np.save(qids_path, all_qids)
+    with open('data/query2qid.json', 'r', encoding='utf-8') as f:
+        query2qid = json.load(f)
     
     # Create div_query dictionary
     dq_dict = {}
@@ -63,9 +53,8 @@ def get_docs_dict():
         serps = pickle.load(f)
     
     # Load query mapping
-    with open('data/query2intents.json', 'r') as f:
-        query2intents = json.load(f)
-    query2qid = {query: f"{idx+1}" for idx, query in enumerate(query2intents.keys())}
+    with open('data/query2qid.json', 'r', encoding='utf-8') as f:
+        query2qid = json.load(f)
     
     docs_dict = {}
     docs_rel_score_dict = {}
@@ -163,48 +152,6 @@ def get_stand_best_metric(qd, alpha=0.5):
         pickle.dump(metrics_dict, f)
 
 
-class PickleSerializer:
-    """A class to handle pickle serialization with better version compatibility"""
-
-    @staticmethod
-    def safe_dump(obj, file_path):
-        """Save object to both pickle and JSON formats"""
-        # Save as pickle with highest protocol for better performance
-        try:
-            with open(file_path, 'wb') as f:
-                pickle.dump(obj, f, protocol=pickle.HIGHEST_PROTOCOL)
-        except Exception as e:
-            print(f"Warning: Failed to save pickle file: {e}")
-
-    @staticmethod
-    def safe_load(file_path):
-        """Try to load object with multiple fallback options"""
-        data = None
-        errors = []
-
-        # Try loading pickle file with different protocols
-        try:
-            with open(file_path, 'rb') as f:
-                data = pickle.load(f)
-            return data
-        except Exception as e:
-            errors.append(f"Pickle load failed: {str(e)}")
-            
-            # Try different encoding
-            try:
-                with open(file_path, 'rb') as f:
-                    data = pickle.load(f, encoding='latin1')
-                return data
-            except Exception as e:
-                errors.append(f"Pickle load with latin1 encoding failed: {str(e)}")
-
-        # If all attempts fail, print errors and return None
-        print(f"Failed to load file {file_path}")
-        for error in errors:
-            print(f"  {error}")
-        return None
-
-
 def data_process_worker(task):
     for item in task:
         qid = item[0]
@@ -273,24 +220,12 @@ def generate_qd():
     query_dict = {}
     for f in files:
         file_path = os.path.join(data_dir, f)
-        temp_q = PickleSerializer.safe_load(file_path)
-        if temp_q is not None:
-            query_dict[str(f[:-5])] = temp_q
-    
-    # Save the final query dictionary
-    # pickle.dump(query_dict, open('./data/div_query.data', 'wb'), True)
-    PickleSerializer.safe_dump(query_dict, './data/div_query.data')
+        temp_q = pickle.load(open(file_path, 'rb'))
+        query_dict[str(f[:-5])] = temp_q
+    pickle.dump(query_dict, open('./data/div_query.data', 'wb'), True)
     return query_dict
 
-def split_train_test_qid():
-    qid_list = np.load('data/all_qids.npy')
-    train_qid_list = qid_list[:int(len(qid_list) * 0.8)]
-    test_qid_list = qid_list[int(len(qid_list) * 0.8):]
-    np.save('data/train_qids.npy', train_qid_list)
-    np.save('data/test_qids.npy', test_qid_list)    
 
-
-'''
 def generate_proxy_relevant_feat():
     # Read original TSV file and convert to CSV format
     with open('data/judgement.tsv', 'r', encoding='utf-8') as f_in:
@@ -307,12 +242,10 @@ def generate_proxy_relevant_feat():
                 # Only take query, doc_id and judgement fields, rename doc_id to doc
                 query, _, doc_id, judgement = fields
                 f_out.write(f'{query}\t{doc_id}\t{judgement}\n')
-'''
 
 
 if __name__ == "__main__":
     data_process()
     generate_qd()
-    split_train_test_qid()
-    # generate_proxy_relevant_feat()
+    generate_proxy_relevant_feat()
 

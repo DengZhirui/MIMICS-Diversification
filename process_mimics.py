@@ -3,6 +3,7 @@ import pickle
 from collections import defaultdict
 import random
 from tqdm import tqdm
+import numpy as np
 
 mimics_path = "/Users/sylviadeng/Downloads/MIMICS-master/data/MIMICS-ClickExplore.tsv"
 serps_path = "/Users/sylviadeng/Downloads/MIMICS-BingAPI.result"
@@ -25,16 +26,30 @@ def generate_query2intents():
                 if query not in query2intents:
                     query2intents[query] = set()
                 query2intents[query].update(intents)
+
+    query2intents = {k: list(v) for k, v in query2intents.items() if len(v) <= 10}
     
     print(f"Number of queries with less than 10 intents: {len(query2intents)}")
     
     # Random sampling 10% of queries
     all_queries = list(query2intents.keys())
-    sample_size = int(len(all_queries) * 0.1)
+    sample_size = int(len(all_queries) * 0.15)
     sampled_queries = random.sample(all_queries, sample_size)
     
     # Keep only sampled queries
     sampled_query2intents = {k: list(query2intents[k]) for k in sampled_queries}
+
+    with open('data/query2intents.json', 'w', encoding='utf-8') as f:
+        json.dump(sampled_query2intents, f, ensure_ascii=False, indent=4)
+
+    # Create query to qid mapping
+    query2qid = {query: f"{idx+1}" for idx, query in enumerate(sampled_query2intents.keys())}
+    with open('data/query2qid.json', 'w', encoding='utf-8') as f:
+        json.dump(query2qid, f, ensure_ascii=False, indent=4)
+    
+    # Save all qids
+    all_qids = np.array(list(query2qid.values()))
+    np.save('data/all_qids.npy', all_qids)
     
     return sampled_query2intents
 
@@ -74,7 +89,13 @@ def format_serps(sampled_query2intents):
                     # Store query-doc_id mapping
                     serps[query].append(doc_id)
     
-    return id2doc, serps
+    with open('data/id2doc.pkl', 'wb') as f:
+        pickle.dump(id2doc, f)
+    
+    with open('data/serps.pkl', 'wb') as f:
+        pickle.dump(dict(serps), f)
+    
+    return id2doc, serps, sampled_query2intents
 
 def check_empty_serps(serps, sampled_query2intents):
     # Check queries with empty document list
@@ -139,6 +160,15 @@ def format_judgement(sampled_query2intents, id2doc, serps):
     
     print(f"Judgement completed, processed {processed} query-intent-document pairs")
 
+
+def split_train_test_qid():
+    qid_list = np.load('data/all_qids.npy')
+    train_qid_list = qid_list[:int(len(qid_list) * 0.8)]
+    test_qid_list = qid_list[int(len(qid_list) * 0.8):]
+    np.save('data/train_qids.npy', train_qid_list)
+    np.save('data/test_qids.npy', test_qid_list)    
+
+
 if __name__ == "__main__":
     sampled_query2intents = generate_query2intents()
     id2doc, serps = format_serps(sampled_query2intents)
@@ -146,13 +176,7 @@ if __name__ == "__main__":
 
     judgement = format_judgement(sampled_query2intents, id2doc, serps)
 
-    with open('data/query2intents.json', 'w', encoding='utf-8') as f:
-        json.dump(sampled_query2intents, f, ensure_ascii=False, indent=4)
+    split_train_test_qid()
 
-    with open('data/id2doc.pkl', 'wb') as f:
-        pickle.dump(id2doc, f)
-    
-    with open('data/serps.pkl', 'wb') as f:
-        pickle.dump(dict(serps), f)
     
     
