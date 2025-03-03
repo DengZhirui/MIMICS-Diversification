@@ -51,7 +51,7 @@ python data_info.py
 | Minimum | 2 | 4 |
 | Average | 6.05 | 9.07 |
 
-| Metric | #Number |
+| Item | #Number |
 |--------|---------|
 | Query | 5731 |
 | Documents | 51956 |
