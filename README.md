@@ -1,6 +1,6 @@
 # MIMICS-Diversification
 
-This repository builds a search result diversification dataset based on the MIMICS-ClickExplore dataset. This dataset is constructed based on the [dataset](https://github.com/PxYu/LiEGe-SIGIR2022?tab=readme-ov-file) used by [LiEGe](https://dl.acm.org/doi/abs/10.1145/3477495.3532067) and the dataset processed strategy in [DUB](https://dl.acm.org/doi/10.1145/3583780.3615050).
+This repository builds a search result diversification dataset based on the [MIMICS-ClickExplore dataset](https://github.com/microsoft/MIMICS/tree/master). This dataset is constructed based on the [dataset](https://github.com/PxYu/LiEGe-SIGIR2022?tab=readme-ov-file) used by [LiEGe](https://dl.acm.org/doi/abs/10.1145/3477495.3532067) and the dataset processed strategy in [DUB](https://dl.acm.org/doi/10.1145/3583780.3615050).
 
 ## Data Collection
 
