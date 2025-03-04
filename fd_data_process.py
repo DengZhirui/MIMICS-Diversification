@@ -124,7 +124,7 @@ def get_doc_judge(qd, dd, ds):
                             # Update judgement if document exists
                             if doc_id in dq.subtopic_df.index.values:
                                 dq.subtopic_df[subtopic_id][doc_id] = judge
-                                eval_file.write(f'{dq.qid}\t{subtopic.subtopic_id}\t{doc_id}\t{judge}\n')
+                                eval_file.write(f'{dq.qid} {subtopic.subtopic_id} {doc_id} {judge}\n')
                             break
                     break
     eval_file.close()
