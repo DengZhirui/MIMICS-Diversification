@@ -27,7 +27,7 @@ def get_query_dict():
     for query, intents in tqdm(query2intents.items()):
         qid = query2qid[query]
         # Create subtopic IDs (1-based indexing for each query)
-        subtopic_id_list = [f"{qid}.{i+1}" for i in range(len(intents))]
+        subtopic_id_list = [f"{i}" for i in range(len(intents))]
         
         # Create div_query object
         dq = div_query(
@@ -105,6 +105,8 @@ def get_doc_judge(qd, dd, ds):
         qd[key].add_docs_rel_score(ds[key])
     
     # Load judgements from TSV file
+    eval_file = open('data/ndeval.qrels', 'w', encoding='utf-8')
+
     with open('data/judgement.tsv', 'r', encoding='utf-8') as f:
         # Skip header
         next(f)
@@ -115,16 +117,17 @@ def get_doc_judge(qd, dd, ds):
             # Get qid and subtopic_id
             for qid, dq in qd.items():
                 if dq.query == query:
-                    # Find corresponding subtopic_id
+                    # Find corresponding subtopic_id)
                     for idx, subtopic in enumerate(dq.subtopic_list):
-                        if subtopic == intent:
+                        if subtopic.subtopic == intent:
                             subtopic_id = dq.subtopic_id_list[idx]
                             # Update judgement if document exists
                             if doc_id in dq.subtopic_df.index.values:
                                 dq.subtopic_df[subtopic_id][doc_id] = judge
+                                eval_file.write(f'{dq.qid}\t{subtopic.subtopic_id}\t{doc_id}\t{judge}\n')
                             break
                     break
-    
+    eval_file.close()
     return qd
 
 

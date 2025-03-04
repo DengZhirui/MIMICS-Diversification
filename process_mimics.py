@@ -66,7 +66,7 @@ def format_serps(sampled_query2intents):
                 for doc in documents:
                     # Generate doc_id: query-number
                     doc_counter[query] += 1
-                    doc_id = f"{query}-{doc_counter[query]}"
+                    doc_id = f"{'_'.join(query.split())}-{doc_counter[query]}"
                     
                     # Combine title and snippet
                     doc_content = f"{doc.get('name', '')} {doc.get('snippet', '')}"
