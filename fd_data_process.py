@@ -106,6 +106,7 @@ def get_doc_judge(qd, dd, ds):
     
     # Load judgements from TSV file
     eval_file = open('data/ndeval.qrels', 'w', encoding='utf-8')
+    test_qid_list = [str(qid) for qid in np.load('data/test_qids.npy')]
 
     with open('data/judgement.tsv', 'r', encoding='utf-8') as f:
         # Skip header
@@ -124,7 +125,8 @@ def get_doc_judge(qd, dd, ds):
                             # Update judgement if document exists
                             if doc_id in dq.subtopic_df.index.values:
                                 dq.subtopic_df[subtopic_id][doc_id] = judge
-                                eval_file.write(f'{dq.qid} {subtopic.subtopic_id} {doc_id} {judge}\n')
+                                if str(dq.qid) in test_qid_list:
+                                    eval_file.write(f'{dq.qid} {subtopic.subtopic_id} {doc_id} {judge}\n')
                             break
                     break
     eval_file.close()
